@@ -25,7 +25,7 @@ class Video extends Recurso {
             "tipo" => $this->getTipo(),
             "titulo" => $this->titulo,
             "duracion" => $this->duracion
-        ], JSON_PRETTY_PRINT);
+        ], JSON_PRETTY_PRINT| JSON_UNESCAPED_UNICODE);
     }
    
 }
