@@ -1,5 +1,5 @@
 <?php
-abstract class Recurso {
+abstract class Recurso implements Exportable{
     protected string $titulo;
 
     public function __construct(string $titulo) {
@@ -9,4 +9,8 @@ abstract class Recurso {
     abstract public function getTipo(): string;
 
     public abstract function getDescripcion(): string;
+
+     public function exportar(): string{
+        return $this->getDescripcion();
+     }
 }

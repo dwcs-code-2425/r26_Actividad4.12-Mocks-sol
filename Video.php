@@ -18,4 +18,14 @@ class Video extends Recurso {
     public function getDescripcion(): string {
         return "Tipo: " . $this->getTipo() . ", Título: " . $this->titulo . ", Duración: " . $this->duracion . " minutos";
     }
+
+     public function exportar(): string
+    {
+         return json_encode([
+            "tipo" => $this->getTipo(),
+            "titulo" => $this->titulo,
+            "duracion" => $this->duracion
+        ], JSON_PRETTY_PRINT);
+    }
+   
 }
