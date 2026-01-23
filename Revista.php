@@ -13,4 +13,8 @@ class Revista extends Recurso {
     public function getTipo(): string {
         return "Revista";
     }
+
+    public function getDescripcion(): string {
+        return "Tipo: " . $this->getTipo() . ", Título: " . $this->titulo . ", Número: " . $this->numero;
+    }
 }

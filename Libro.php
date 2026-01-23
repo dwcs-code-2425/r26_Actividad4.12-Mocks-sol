@@ -13,6 +13,8 @@ class Libro extends Recurso {
     public function getTipo(): string {
         return "Libro";
     }
-
+public function getDescripcion(): string {
+        return "Tipo: " . $this->getTipo() . ", Título: " . $this->titulo . ", ISBN: " . $this->isbn;
+    }       
   
 }

@@ -7,4 +7,6 @@ abstract class Recurso {
     }
 
     abstract public function getTipo(): string;
+
+    public abstract function getDescripcion(): string;
 }
