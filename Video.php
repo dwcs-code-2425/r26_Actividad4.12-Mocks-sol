@@ -19,13 +19,13 @@ class Video extends Recurso {
         return "Tipo: " . $this->getTipo() . ", Título: " . $this->titulo . ", Duración: " . $this->duracion . " minutos";
     }
 
-     public function exportar(): string
-    {
-         return json_encode([
-            "tipo" => $this->getTipo(),
-            "titulo" => $this->titulo,
-            "duracion" => $this->duracion
-        ], JSON_PRETTY_PRINT| JSON_UNESCAPED_UNICODE);
-    }
+    //  public function exportar(): string
+    // {
+    //      return json_encode([
+    //         "tipo" => $this->getTipo(),
+    //         "titulo" => $this->titulo,
+    //         "duracion" => $this->duracion
+    //     ], JSON_PRETTY_PRINT| JSON_UNESCAPED_UNICODE);
+    // }
    
 }

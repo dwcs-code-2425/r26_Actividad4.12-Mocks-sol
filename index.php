@@ -1,5 +1,9 @@
 <?php
-require_once 'Exportable.php';
+
+require_once 'Exportador.php';
+require_once 'ExportadorTexto.php';
+require_once 'ExportadorJSON.php';
+require_once 'ExportadorXML.php';
 require_once 'Recurso.php';
 require_once 'Libro.php';
 require_once 'Revista.php';
@@ -17,8 +21,13 @@ echo "<br/>";
 echo $video->getDescripcion();
 
 echo "<h2> Exportación</h2>";
-echo $libro->exportar();
-echo "<br/>";
-echo "<pre>";
+$video->setExportador(new ExportadorTexto());
 echo $video->exportar();
+echo "<br/>";
+$video->setExportador(new ExportadorJSON());
+echo $video->exportar();
+echo "<br/>";
+$video->setExportador(new ExportadorXML());
+echo "<pre>";
+echo htmlspecialchars($video->exportar());
 echo "</pre>";
