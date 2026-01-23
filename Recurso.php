@@ -1,19 +1,24 @@
 <?php
-abstract class Recurso{
+abstract class Recurso
+{
+    use Logger;
     protected string $titulo;
     protected Exportador $exportador;
 
-    public function __construct(string $titulo) {
+    public function __construct(string $titulo)
+    {
         $this->titulo = $titulo;
+        $this->log("Se ha creado el recurso: " . $titulo, "DEBUG", "debug.log");
     }
 
     abstract public function getTipo(): string;
 
     public abstract function getDescripcion(): string;
 
-     public function exportar(): string{
+    public function exportar(): string
+    {
         return $this->exportador->exportar($this);
-     }
+    }
 
 
     /**

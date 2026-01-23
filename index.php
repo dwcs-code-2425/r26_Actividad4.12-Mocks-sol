@@ -1,5 +1,5 @@
 <?php
-
+require_once "Logger.php";
 require_once 'Exportador.php';
 require_once 'ExportadorTexto.php';
 require_once 'ExportadorJSON.php';
