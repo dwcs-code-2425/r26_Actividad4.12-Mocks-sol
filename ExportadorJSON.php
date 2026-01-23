@@ -4,6 +4,6 @@ class ExportadorJSON implements Exportador {
         return json_encode([
             "tipo" => $recurso->getTipo(),
             "titulo" => $recurso->getTitulo()
-        ]);
+        ], JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
     }
 }
