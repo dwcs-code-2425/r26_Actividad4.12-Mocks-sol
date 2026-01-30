@@ -1,4 +1,5 @@
 <?php
+namespace App\Model\Biblioteca;
 class Libro extends Recurso {
     private string $isbn;
 

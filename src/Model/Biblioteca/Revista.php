@@ -1,4 +1,5 @@
 <?php
+namespace App\Model\Biblioteca;
 class Revista extends Recurso {
     private int $numero;
 

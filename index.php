@@ -1,13 +1,21 @@
 <?php
-require_once "Logger.php";
-require_once 'Exportador.php';
-require_once 'ExportadorTexto.php';
-require_once 'ExportadorJSON.php';
-require_once 'ExportadorXML.php';
-require_once 'Recurso.php';
-require_once 'Libro.php';
-require_once 'Revista.php';
-require_once 'Video.php';
+require_once __DIR__.DIRECTORY_SEPARATOR."autoload.php";
+use App\Model\Biblioteca\{  Libro, Revista, Video};
+use App\Service\{  ExportadorTexto, ExportadorJSON, ExportadorXML };
+
+
+// require_once "src/Service/Traits/Logger.php";
+// require_once 'src/Service/Exportador/Exportador.php';
+// require_once 'src/Service/Exportador/ExportadorTexto.php';
+// require_once 'src/Service/Exportador/ExportadorJSON.php';
+// require_once 'src/Service/Exportador/ExportadorXML.php';
+// require_once 'src/Model/Infraestructura/Recurso.php';
+// require_once 'src/Model/Biblioteca/Recurso.php';
+// require_once 'src/Model/Biblioteca/Libro.php';
+// require_once 'src/Model/Biblioteca/Revista.php';
+// require_once 'src/Model/Biblioteca/Video.php';
+
+
 
 
 $libro = new Libro("Aprendiendo PHP", "978-3-16-148410-0");
