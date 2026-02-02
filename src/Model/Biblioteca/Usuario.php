@@ -3,7 +3,7 @@ namespace App\Model\Biblioteca;
 class Usuario
 {
 
-    const MAX_PRESTAMOS = 3;
+  
     private string $nombre;
 
     private string $email;

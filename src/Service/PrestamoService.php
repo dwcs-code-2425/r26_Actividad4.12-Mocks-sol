@@ -10,6 +10,7 @@ class PrestamoService
     use Logger;
     private array $usuarios = [];
     private array $recursos = [];
+    private const MAX_PRESTAMOS = 3;
 
     public function prestar(string $nombreUsuario, int $idRecurso): Prestamo
     {
@@ -31,7 +32,7 @@ class PrestamoService
             $this->log("Recurso no disponible: " . $idRecurso, "ERROR", "app.log");
             throw new \Exception("Recurso no disponible");
         }
-        if (count($usuario->getPrestamos()) >= Usuario::MAX_PRESTAMOS) {
+        if (count($usuario->getPrestamos()) >= self::MAX_PRESTAMOS) {
             $this->log("Usuario ha alcanzado el máximo de préstamos: " . $nombreUsuario, "ERROR", "app.log");
             throw new \Exception("El usuario ha alcanzado el máximo de préstamos");
         }
