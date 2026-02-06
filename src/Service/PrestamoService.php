@@ -62,4 +62,11 @@ class PrestamoService
         $prestamo->getRecurso()->setEstado(EstadoRecurso::DISPONIBLE);
         $prestamo->getUsuario()->removePrestamo($prestamo);
     }
+
+    public function getUsuarioByEmail(string $email):?Usuario{
+        if(isset($this->usuarios[$email])){
+            return $this->usuarios[$email];
+        }
+        return null;
+    }
 }
