@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Model\Biblioteca;
+
 class Usuario
 {
 
-  
+    private ?int $id;
     private string $nombre;
 
     private string $email;
@@ -38,7 +40,6 @@ class Usuario
     {
 
         $this->prestamos[] = $prestamo;
-
     }
 
     public function removePrestamo(Prestamo $prestamo): void
@@ -58,5 +59,29 @@ class Usuario
     public function getPrestamos()
     {
         return $this->prestamos;
+    }
+
+    /**
+     * Get the value of id
+     *
+     * @return ?int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @param ?int $id
+     *
+     * @return self
+     */
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }
