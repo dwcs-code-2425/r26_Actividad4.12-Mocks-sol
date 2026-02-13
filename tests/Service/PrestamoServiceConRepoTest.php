@@ -2,35 +2,53 @@
 
 namespace App\Tests\Service;
 
+use App\Repository\UsuarioRepository;
 use Exception;
 use App\Model\Biblioteca\Libro;
 use App\Model\Biblioteca\Video;
 use PHPUnit\Framework\TestCase;
-use App\Service\PrestamoService;
+use App\Service\PrestamoServiceConRepo;
 use App\Model\Biblioteca\Revista;
 use App\Model\Biblioteca\Usuario;
 use App\Model\Biblioteca\Enum\EstadoRecurso;
 
 
-class PrestamoServiceTest extends TestCase
+
+class PrestamoServiceConRepoTest extends TestCase
 {
+  // public function testDummy() {
+  //   $this->assertTrue(true);
+  // }
 
-
-  private PrestamoService $service;
+  private PrestamoServiceConRepo $service;
+  private UsuarioRepository $usuarioRepository;
   private Libro $libro1;
   private Revista $revista2;
   private Video $video3;
-  
+
+  private Usuario $usuario;
   protected function setUp(): void
   {
-    $this->service = new PrestamoService();
-    $usuario = new Usuario("juan", "juan@example.com");
+
+    $this->usuarioRepository = $this->createMock(UsuarioRepository::class);
+    $this->service = new PrestamoServiceConRepo($this->usuarioRepository);
+
+    $this->usuario = new Usuario("juan", "juan@example.com");
     $this->libro1 = new Libro("Libro de prueba", "Autor de prueba");
     $this->revista2 = new Revista("Título", 1000);
     $this->video3 = new Video("Vídeo", 120);
 
 
-    $this->service->registrarUsuario($usuario);
+    //stub 
+    //No usar expectativas en setUp por regla general
+    $this->usuarioRepository
+      ->method('create')
+      ->willReturn($this->usuario)
+      ->with($this->usuario);
+
+    $this->usuario = $this->service->registrarUsuario($this->usuario);
+
+
     $this->service->registrarRecurso($this->libro1);
     $this->service->registrarRecurso($this->revista2);
     $this->service->registrarRecurso($this->video3);
@@ -38,10 +56,21 @@ class PrestamoServiceTest extends TestCase
 
   public function testPrestarRecursoDisponible(): void
   {
-    $usuario = $this->service->getUsuarioByEmail("juan@example.com");
+
+    //antes de llamar al método prestar, crearemos el mock y definiremos su comportamiento
+    $this->usuarioRepository
+      ->expects($this->exactly(2))
+      ->method('findByEmail')
+      ->with($this->usuario->getEmail())
+      ->willReturn($this->usuario);
+    //getUsuarioByEmail también hace uso de findByEmail, por eso esperamos que se llame exactamente 2 veces a este método
+    $usuario = $this->service->getUsuarioByEmail($this->usuario->getEmail());
     //Sabemos que $usuario no es null 
     $contadorPrestamosAntesDePrestar = count($usuario->getPrestamos());
-    $prestamo = $this->service->prestar("juan@example.com", $this->libro1->getId());
+
+
+    $prestamo = $this->service->prestar($this->usuario->getEmail(), $this->libro1->getId());
+    //Comprobamos que el estado del recurso es PRESTADO y que el número de préstamos del usuario ha aumentado en 1
     $this->assertEquals(EstadoRecurso::PRESTADO, $prestamo->getRecurso()->getEstado());
     $this->assertEquals(
       $contadorPrestamosAntesDePrestar + 1,
