@@ -86,29 +86,77 @@ class PrestamoServiceConRepoTest extends TestCase
     $this->service->prestar("inexistente", $this->libro1->getId());
   }
 
+
+
   public function testRecursoNoEncontradoLanzaExcepcion(): void
   {
+    $this->usuarioRepository
+    ->expects($this->once())
+    ->method("findByEmail")
+    ->with("juan@example.com")
+    ->willReturn($this->usuario);
+
     $this->expectException(Exception::class);
     $this->expectExceptionMessage("Recurso no encontrado");
 
     $this->service->prestar("juan@example.com", 999);
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
   public function testPrestarRecursoPrestadoLanzaExcepcion(): void
   {
+
+$this->usuarioRepository
+    ->expects($this->once())
+    ->method("findByEmail")
+    ->with("juan@example.com")
+    ->willReturn($this->usuario);
+
     $this->service->prestar("juan@example.com", $this->libro1->getId());
 
     $ana = new Usuario("Ana", "ana@example.com");
+
+    $this->usuarioRepository
+   // ->expects($this->once())
+      ->method('create')     
+      ->with($ana)
+       ->willReturn($ana);
+
     $this->service->registrarUsuario($ana);
 
     $this->expectException(Exception::class);
     $this->expectExceptionMessage("Recurso no disponible");
+
+    $this->usuarioRepository
+    ->expects($this->once())
+    ->method("findByEmail")
+    ->with("ana@example.com")
+    ->willReturn($ana);
+
 
     $this->service->prestar("ana@example.com", $this->libro1->getId());
   }
 
   public function testPrestarMasDeMaxPrestamosLanzaExcepcion()
   {
+$this->usuarioRepository
+    ->expects($this->exactly(4))
+    ->method("findByEmail")
+    ->with("juan@example.com")
+    ->willReturn($this->usuario);
+
+
     $this->service->prestar("juan@example.com", $this->libro1->getId());
     $this->service->prestar("juan@example.com", $this->revista2->getId());
     $this->service->prestar("juan@example.com", $this->video3->getId());
@@ -124,6 +172,12 @@ class PrestamoServiceConRepoTest extends TestCase
 
   public function testDevolverPrestamoConExito()
   {
+$this->usuarioRepository
+    ->expects($this->exactly(2))
+    ->method("findByEmail")
+    ->with("juan@example.com")
+    ->willReturn($this->usuario);
+
     $usuario = $this->service->getUsuarioByEmail("juan@example.com");
     $prestamo = $this->service->prestar("juan@example.com", $this->video3->getId());
     $numPrestamosAntesDeDevolver = count($usuario->getPrestamos());
