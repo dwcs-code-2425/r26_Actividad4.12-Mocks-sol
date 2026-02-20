@@ -43,8 +43,8 @@ class PrestamoServiceConRepoTest extends TestCase
     //No usar expectativas en setUp por regla general
     $this->usuarioRepository
       ->method('create')
-      ->willReturn($this->usuario)
-      ->with($this->usuario);
+      ->willReturnArgument(0);
+
 
     $this->usuario = $this->service->registrarUsuario($this->usuario);
 
@@ -91,10 +91,10 @@ class PrestamoServiceConRepoTest extends TestCase
   public function testRecursoNoEncontradoLanzaExcepcion(): void
   {
     $this->usuarioRepository
-    ->expects($this->once())
-    ->method("findByEmail")
-    ->with("juan@example.com")
-    ->willReturn($this->usuario);
+      ->expects($this->once())
+      ->method("findByEmail")
+      ->with("juan@example.com")
+      ->willReturn($this->usuario);
 
     $this->expectException(Exception::class);
     $this->expectExceptionMessage("Recurso no encontrado");
@@ -117,32 +117,41 @@ class PrestamoServiceConRepoTest extends TestCase
   public function testPrestarRecursoPrestadoLanzaExcepcion(): void
   {
 
-$this->usuarioRepository
-    ->expects($this->once())
-    ->method("findByEmail")
-    ->with("juan@example.com")
-    ->willReturn($this->usuario);
+    // $this->usuarioRepository
+//     ->expects($this->once())
+//     ->method("findByEmail")
+//     ->with("juan@example.com")
+//     ->willReturn($this->usuario);
+
+    $ana = new Usuario("Ana", "ana@example.com");
+    $this->usuarioRepository
+      ->method("findByEmail")
+      ->willReturnMap([
+        ["juan@example.com", $this->usuario],
+        ["ana@example.com", $ana],
+      ]);
+
 
     $this->service->prestar("juan@example.com", $this->libro1->getId());
 
-    $ana = new Usuario("Ana", "ana@example.com");
 
-    $this->usuarioRepository
-   // ->expects($this->once())
-      ->method('create')     
-      ->with($ana)
-       ->willReturn($ana);
+
+    //   $this->usuarioRepository
+    //  // ->expects($this->once())
+    //     ->method('create')     
+    //     ->with($ana)
+    //      ->willReturn($ana);
 
     $this->service->registrarUsuario($ana);
 
     $this->expectException(Exception::class);
     $this->expectExceptionMessage("Recurso no disponible");
 
-    $this->usuarioRepository
-    ->expects($this->once())
-    ->method("findByEmail")
-    ->with("ana@example.com")
-    ->willReturn($ana);
+    // $this->usuarioRepository
+    // ->expects($this->once())
+    // ->method("findByEmail")
+    // ->with("ana@example.com")
+    // ->willReturn($ana);
 
 
     $this->service->prestar("ana@example.com", $this->libro1->getId());
@@ -150,11 +159,11 @@ $this->usuarioRepository
 
   public function testPrestarMasDeMaxPrestamosLanzaExcepcion()
   {
-$this->usuarioRepository
-    ->expects($this->exactly(4))
-    ->method("findByEmail")
-    ->with("juan@example.com")
-    ->willReturn($this->usuario);
+    $this->usuarioRepository
+      ->expects($this->exactly(4))
+      ->method("findByEmail")
+      ->with("juan@example.com")
+      ->willReturn($this->usuario);
 
 
     $this->service->prestar("juan@example.com", $this->libro1->getId());
@@ -172,11 +181,11 @@ $this->usuarioRepository
 
   public function testDevolverPrestamoConExito()
   {
-$this->usuarioRepository
-    ->expects($this->exactly(2))
-    ->method("findByEmail")
-    ->with("juan@example.com")
-    ->willReturn($this->usuario);
+    $this->usuarioRepository
+      ->expects($this->exactly(2))
+      ->method("findByEmail")
+      ->with("juan@example.com")
+      ->willReturn($this->usuario);
 
     $usuario = $this->service->getUsuarioByEmail("juan@example.com");
     $prestamo = $this->service->prestar("juan@example.com", $this->video3->getId());
